@@ -1,7 +1,8 @@
 import { USER_INFO } from "./ConstStores";
 import { useLocalStore } from "mobx-react-lite";
-import { UserInfoStore } from "./UserInfoStore";
-const userInfoData=  new UserInfoStore();
+import { BaseStore } from "./BaseStore";
+import { initIUserInfo } from "../Type/Init/Init";
+const userInfoData=  new BaseStore(initIUserInfo);
 export function CreateStores() {
     return {
       [USER_INFO]: { 
