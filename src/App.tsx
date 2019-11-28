@@ -1,25 +1,18 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-
+import {   BrowserRouter} from 'react-router-dom';
+import BasicRoute from './View/BasicRoute';
+import { renderRoutes } from 'react-router-config';
+import { HookSStore } from './Store/HookStore';
 const App: React.FC = () => {
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+     <HookSStore>
+      <BrowserRouter>
+        {renderRoutes(BasicRoute)}
+      </BrowserRouter>
+      </HookSStore>
+    
   );
 }
 
