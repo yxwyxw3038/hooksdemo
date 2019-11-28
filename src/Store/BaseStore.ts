@@ -1,7 +1,7 @@
 import { IBase } from "../Type/Interface/Interface";
 import { initIUserInfo } from "../Type/Init/Init";
 export class BaseStore {
-    private Info: IBase;
+    private Info: any;
     constructor(initBase :IBase) {
         this.Info = {...initBase};
     }
