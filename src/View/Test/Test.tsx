@@ -13,7 +13,7 @@ function Test(props: any) {
     const onTextChange= (e :any) => {
             const AccountName:string=e.target.value
             const temp:IUserInfo={...store.Data.GetInfo,AccountName} 
-            store.Data.UpdateUserInfo(temp)
+            store.Data.Update(temp)
             setStoreInfo(store.Data.GetInfo)
     }
     return (<div>

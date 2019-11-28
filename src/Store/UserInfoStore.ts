@@ -8,10 +8,10 @@ export class UserInfoStore {
     get GetInfo() {
         return {...this.Info};
     }
-    public UpdateUserInfo = (item: IUserInfo): void => {      
+    public Update = (item: IUserInfo): void => {      
         this.Info ={...item}
     };
-    public ClearUserInfo = (): void => {      
+    public Clear = (): void => {      
         this.Info ={...initIUserInfo}
       };
 }
