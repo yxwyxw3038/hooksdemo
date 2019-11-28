@@ -2,8 +2,7 @@ export interface IBase {
  
 }
 export interface IBaseClass {
-    Info:any;
-    (initBase: IBase):void;
+    // (initBase: IBase):void;
     Update(initBase:IBase):void;
     GetInfo():IBase;
     Clear():void;

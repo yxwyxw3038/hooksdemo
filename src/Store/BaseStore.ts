@@ -1,6 +1,6 @@
-import { IBase } from "../Type/Interface/Interface";
+import { IBaseClass, IBase } from "../Type/Interface/Interface";
 import { initIUserInfo } from "../Type/Init/Init";
-export class BaseStore implements  IBase {
+export class BaseStore implements  IBaseClass {
     private Info: any;
     constructor(initBase :IBase) {
         this.Info = {...initBase};
