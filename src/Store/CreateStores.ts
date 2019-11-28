@@ -5,17 +5,12 @@ import { initIUserInfo } from "../Type/Init/Init";
 const userInfoData=  new BaseStore(initIUserInfo);
 export function CreateStores() {
     return {
-      [USER_INFO]: { 
-      Data:userInfoData  
-  }
+      [USER_INFO]: { Data:userInfoData }
      
     };
 }
 export function LocalStore() {
-    const USER_INFO_Store= useLocalStore(() => ({
-        Data:userInfoData
-    }
-    ))
+    const USER_INFO_Store= useLocalStore(() => ({ Data:userInfoData}))
     return {
         [USER_INFO]:  USER_INFO_Store
     };
