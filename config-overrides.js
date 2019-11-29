@@ -7,6 +7,12 @@ module.exports = override(
        }),
         addLessLoader({
            javascriptEnabled: true,
-          modifyVars: { '@primary-color': '#1DA57A' },
+          modifyVars: {  
+          "layout-header-background": "#4682B4",
+          "layout-header-height":"40px",
+          "modal-header-bg":"#4682B4",
+          "primary-color": "#4682B4",
+          "tabs-card-active-color":"#4682B4",
+          "tabs-card-head-background":"#4682B4", },
         }),
 );
