@@ -17,13 +17,10 @@ function HomeNoticeDrawer (props: any) {
     useEffect(() => {
         const changeIdtemp = PS.subscribe('HomeNoticeDrawerChange',(name:any, allValues:any)=>{
             if ( allValues.info!==null&&allValues.info!==undefined) {
-                
-                // const allValues0 ={noticeCount:newMsgCount+1}
-                // PubSub.publish('HomeNoticeBadgeCount',allValues0)
+                //useEffect 处理静态值写法
                 setNoticeList(n=>( [...n,allValues.info]))
                 setNewMsgCount(n=>{ 
-                    const allValues0 ={noticeCount:n+1}
-                    PS.publish('HomeNoticeBadgeCount',allValues0)
+                    PS.publish('HomeNoticeBadgeCount',{noticeCount:n+1})
                     return         n+1})
           }
         } );  
