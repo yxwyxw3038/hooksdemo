@@ -7,10 +7,15 @@ import { initDemoName } from "../../Type/Init/Init";
 import CryptoJS from "crypto-js";
 import api from '../../Api/myaxios';
 import LoginFrom from "./LoginFrom";
+import '../../App.css';
+import '../../Css/Login.css';
+import { BaseStore } from "../../Store/BaseStore";
 function Login(props: any) {
     const [loading,setLoading] = useState(false);
     const {user_info} = useContext(MyContext);
-    // const [storeInfo, setStoreInfo] = useState(user_info.Data.GetInfo);
+    const [beginCount]=useState(0)
+    const [pubSubnfo]=useState(new BaseStore({}))
+    // const [storeInfo] = useState(user_info.Data.GetInfo);
     // useEffect(() => {
     //     SetLocalStorageUserInfo(storeInfo)
     //     return ()=> {  
@@ -19,8 +24,14 @@ function Login(props: any) {
     //     },[storeInfo]);
     useEffect(() => {
             document.title= initDemoName+"登录页";
+            user_info.Data.Clear()
             ClearLocalStorageUserInfo()
-        });
+            pubSubnfo.Update({id:"11111"})
+        return () =>{
+         console.log("HI！")
+        }
+        },[beginCount, user_info.Data,pubSubnfo]);
+
     const  handleSubmit = (values: any): void => {
         login(values.username,values.password);
     }
@@ -86,7 +97,7 @@ function Login(props: any) {
               });
      
        }
-    return ( <LoginFrom loading={loading} onHandleSubmit={handleSubmit} />
+    return ( <div className="login-wrap"><LoginFrom loading={loading} onHandleSubmit={handleSubmit} /> </div> 
         )
 }
 

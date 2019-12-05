@@ -1,0 +1,75 @@
+.layoutHeader {
+  
+    height: 40px;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+     /* padding: 0 20px;  */
+    z-index: 999;
+    box-sizing: border-box;
+    position: fixed;
+    /* background-color: rgb(29, 67, 95); */
+  }
+  /* .ant-layout-header {
+    line-height: 40px;
+} */
+  .layoutMiddle {
+    
+        margin-top: 40px;
+        display : flex;
+}
+.header-operations {
+    display: inline-block;
+    float: right; 
+    padding-right: 30px;
+    height: 100%;
+    margin:0px;
+  }
+  .header-operations li {
+   
+     size: 16;
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+  }
+  .headerDiv
+  {
+    /* margin-top: 5px; */
+    text-align: center;
+    vertical-align: middle;
+  }
+  /* .ant-dropdown-trigger,
+  .ant-dropdown-menu-item,
+  .ant-dropdown-menu-item-active,
+  .ant-btn::before,
+  .ant-btn:active
+  {
+    background-color: rgb(29, 67, 95);
+  } */
+.menuDiv
+{
+    margin-top: 10px;
+    height: 100%;
+    min-height: 800px;
+
+    width: 100%;
+   
+}
+.submenuDiv
+{
+    margin: 2px;
+    height: 30px;
+    width: 100%;
+    text-align: left;
+ 
+}
+
+/* .ant-layout-sider
+{
+  background-color: #fff;
+} */
+/* .ant-tabs-new-tab svg
+{
+  [data-icon]:'close'
+} */

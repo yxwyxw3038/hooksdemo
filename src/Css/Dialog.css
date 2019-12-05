@@ -1,0 +1,26 @@
+.ContRow{
+    height: 300px;
+}
+.TitleRow{
+    height: 40px;
+}
+.btnRow{
+    text-align:center;
+}
+.bgbutClass{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.treeDiv{
+    height: 290px;
+    overflow:auto;
+}
+.StepsDiv{
+   
+    height: 400px;
+    overflow:auto;
+}
+.Row3Div{
+    margin-top: 10px;
+
+}

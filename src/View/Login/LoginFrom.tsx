@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { Form, message, Card, Input, Button, Icon } from "antd";
+import '../../App.css';
+import '../../Css/Login.css';
+import { ILoginFromProps } from "../../Type/Interface/InterfaceProps";
 const FormItem = Form.Item;
-type IProps = Readonly<{
-    form: any
-    loading: boolean;
-    onHandleSubmit: (arg: any) => void;
-  }>;
+
   
-function LoginFrom(props: IProps) {
+function LoginFrom(props: ILoginFromProps) {
   
     const { getFieldDecorator } = props.form;
     const [loading] =  useState(props.loading)
@@ -28,7 +27,7 @@ function LoginFrom(props: IProps) {
             });
           }
 
-    return ( <div className="login-wrap">
+    return ( <div>
                 <Card id="loginCard">
                 <Form onSubmit={handleSubmit} className="login-form">
                 <FormItem>
@@ -55,5 +54,4 @@ function LoginFrom(props: IProps) {
             </div>
         )
 }
-
-export default  Form.create<IProps>()(LoginFrom); 
+export default  Form.create<ILoginFromProps>()(LoginFrom); 
