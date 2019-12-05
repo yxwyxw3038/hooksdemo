@@ -3,15 +3,15 @@ import '../../App.css';
 import '../../Css/Home.css';
 import { MyContext } from "../../Store/HookStore";
 import {Badge,Button,Dropdown,Icon,Menu,message, Modal}from 'antd';
-import { BaseStore } from "../../Store/BaseStore";
+import * as PS from 'pubsub-js'
 function HomeHeader(props: any) {
     const [noticeCount,setNoticeCount]=useState(0)
-    const [beginCount]=useState(0)
+    // const [beginCount]=useState(0)
     // const [changeId,setChangeId]=useState()
-    const [pubSubnfo]=useState(new BaseStore({}))
+    // const [pubSubnfo]=useState(new BaseStore({}))
     const {user_info} = useContext(MyContext)
     useEffect(() => {
-        const changeIdtemp = PubSub.subscribe('HomeNoticeBadgeCount',(name:any, allValues:any)=>
+        const changeIdtemp = PS.subscribe('HomeNoticeBadgeCount',(name:any, allValues:any)=>
         {
             if ( allValues.noticeCount!==null&&allValues.noticeCount!==undefined) {
                 
@@ -19,11 +19,11 @@ function HomeHeader(props: any) {
             }
            
         } );  
-        pubSubnfo.Update({id:changeIdtemp})
+    
         return ()=> {  
-            PubSub.unsubscribe(pubSubnfo.GetInfo.id); 
+            PS.unsubscribe(changeIdtemp); 
         }
-        },[beginCount,pubSubnfo]);
+        },[]);
     const handleMenuClick=(e: any) => {
       
         switch(e.key)

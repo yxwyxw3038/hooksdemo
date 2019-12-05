@@ -4,38 +4,41 @@ import React, { useState,  useEffect } from "react";
 import '../../App.css';
 import '../../Css/Home.css';
 import { initNoticeBillList } from '../../Type/Init/InitNoticeBill';
+import { BaseStore } from '../../Store/BaseStore';
+import * as PS from 'pubsub-js'
 function HomeNoticeDrawer (props: any) {
     const [visible,setVisible]=useState(false)
-    const [changeId,setChangeId]=useState()
-    const [changeId1,setChangeId1]=useState()
-    const [beginCount,setBeginCount]=useState(0)
+    const [pubSubInfo]=useState(new BaseStore({}))
+    const [pubSubInfo1]=useState(new BaseStore({}))
+    const [beginCount]=useState(0)
     const [noticeList,setNoticeList]=useState([...initNoticeBillList])
     const [newMsgCount,setNewMsgCount]=useState(0)
+
     useEffect(() => {
-        const changeIdtemp = PubSub.subscribe('HomeNoticeBadgeCount',(name:any, allValues:any)=>{
+        const changeIdtemp = PS.subscribe('HomeNoticeDrawerChange',(name:any, allValues:any)=>{
             if ( allValues.info!==null&&allValues.info!==undefined) {
                 
-                const allValues0 ={noticeCount:newMsgCount+1}
-                PubSub.publish('HomeNoticeBadgeCount',allValues0)
-                setNoticeList([...noticeList,allValues.info])
-                setNewMsgCount(newMsgCount+1)
+                // const allValues0 ={noticeCount:newMsgCount+1}
+                // PubSub.publish('HomeNoticeBadgeCount',allValues0)
+                setNoticeList(n=>( [...n,allValues.info]))
+                setNewMsgCount(n=>{ 
+                    const allValues0 ={noticeCount:n+1}
+                    PS.publish('HomeNoticeBadgeCount',allValues0)
+                    return         n+1})
           }
         } );  
-        const changeIdtemp1 = PubSub.subscribe('HomeNoticeDrawerOpen',(name:any, allValues:any)=>{
+        const changeIdtemp1 = PS.subscribe('HomeNoticeDrawerOpen',(name:any, allValues:any)=>{
             setNewMsgCount(0)
             setVisible(true)
         });
-        // const onclose (a:any,b:any) => {
-        //     setVisible(false)
-        //   }
-        setChangeId(changeIdtemp);
-        setChangeId1(changeIdtemp1);
+        pubSubInfo.Update({id:changeIdtemp})
+        pubSubInfo1.Update({id:changeIdtemp1})
         return ()=> {  
-            PubSub.unsubscribe(changeId);
-            PubSub.unsubscribe(changeId1); 
+            PubSub.unsubscribe(pubSubInfo.GetInfo.id);
+            PubSub.unsubscribe(pubSubInfo1.GetInfo.id); 
         }
-        },[beginCount]);
-    if (beginCount==0){ setBeginCount(1)}
+        },[beginCount,pubSubInfo,pubSubInfo1]);
+    console.log(newMsgCount)
     return (
         <Drawer
         placement="right"

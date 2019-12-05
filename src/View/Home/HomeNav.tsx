@@ -5,14 +5,12 @@ import '../../Css/Home.css';
 import { MyContext } from '../../Store/HookStore';
 import { initMenu } from '../../Type/Init/Init';
 import api from '../../Api/myaxios';
-import { SubMenu } from 'rc-menu/lib/SubMenu';
 function HomeNav (props: any) {
     const {user_info} = useContext(MyContext)
     const[menu,setMenu]= useState(initMenu)
-    const[count,setCount]= useState(0)
-  
+    const [beginCount]=useState(0)
     const GetMenu=(tempToken:string ,tempuserID:string)=>{
-        setCount(count+1)
+
         const myapi =  new api();
         myapi.post('User/GetUserMenu?Token='+tempToken, {
             userID:tempuserID,
@@ -50,31 +48,31 @@ function HomeNav (props: any) {
     const handleClick= (e:any):void => {
        props.menuCallback(e.key);
     }
-    if(count===0) {
+    useEffect(() => {
         GetMenu(user_info.Data.GetInfo.Token,user_info.Data.GetInfo.ID)
-    }
+    },[beginCount,user_info])
     return (
     <Menu  className="menuDiv" mode="inline"  onClick={handleClick}>
     {
         menu.map((item:any, i:any)=> (
-            item.Node!=null ?
-            <SubMenu  key={item.ID} title={<span><Icon type={item.Icon} /><span className="spanFont">{item.MenuName}</span></span>} >
+            item.Node!=null &&item.Node.length>0 ?
+            <Menu.SubMenu  key={item.ID} title={<span><Icon type={item.Icon} /><span className="spanFont">{item.MenuName}</span></span>} >
                 {item.Node.map(
                     (items:any)=> (
-                        items.Node !=null ?
-                        <SubMenu  key={items.ID} title={<span><Icon type={items.Icon} /><span className="spanFont">{items.MenuName}</span></span>} >
+                        items.Node !=null &&items.Node.length>0 ?
+                        <Menu.SubMenu  key={items.ID} title={<span><Icon type={items.Icon} /><span className="spanFont">{items.MenuName}</span></span>} >
                         {item.Node.map(
                         (itemss:any)=> (
                             <Menu.Item className="submenuDiv" key={itemss.ID}><span> <Icon type={itemss.Icon} /><span className="spanFont">{itemss.MenuName}</span></span></Menu.Item>
                         ))
                         }
-                        </SubMenu>
+                        </Menu.SubMenu>
                         :<Menu.Item className="submenuDiv" key={items.ID}><span><Icon type={items.Icon} /><span className="spanFont">{items.MenuName}</span></span></Menu.Item>
                     )
 
                 )}
     
-            </SubMenu>
+            </Menu.SubMenu>
             :  <Menu.Item className="submenuDiv" key={item.ID}><span><Icon type={item.Icon} /><span className="spanFont">{item.MenuName}</span></span></Menu.Item>
         )
         )

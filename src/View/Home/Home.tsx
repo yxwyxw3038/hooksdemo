@@ -11,13 +11,13 @@ import { IUserInfo, WsMseType, IWsInfo } from '../../Type/Interface/Interface';
 import asyncComponent from '../Component/AsyncComponent';
 import HomeHeader from './HomeHeader';
 import HomeNav from './HomeNav';
-import HomeDrawer from './HomeDrawer';
+import * as PS from 'pubsub-js'
 const TabPane = Tabs.TabPane;
 function Home (props: any) {
     const {user_info} = useContext(MyContext);
     const [ActiveKey,setActiveKey]=useState("0")
     const [beginCount]=useState(0)
-    // const [myWs,setMyWs]=useState()
+    // const [myWs]=useState({Data:new ws().NewWs()})
     const [tabList,setTabList]=useState([...initTabs])
     const myhistory=props.history;
     if(user_info.Data.GetInfo.Token===""){
@@ -62,7 +62,7 @@ function Home (props: any) {
                
                 
               });
-              PubSub.publish('HomeNoticeDrawerChange',allValues);
+              PS.publish('HomeNoticeDrawerChange',allValues);
               }
           };  
           myws.onclose =  (evt:any) => {  
@@ -73,7 +73,7 @@ function Home (props: any) {
          
      return () =>{ }
 
-    },[beginCount])
+    },[beginCount,myhistory,user_info])
     const UserInfoCallback=():any =>{
         let tabListTemp= [...tabList];
         tabListTemp= tabListTemp.map((item:any)=>({...item,IsNew:false} ) );
@@ -111,32 +111,32 @@ function Home (props: any) {
     const onEdit = (targetKey :any, action:any) => {
         tabList[action](targetKey);
       }
-    const add = () => {
-        const activeKey:string= "0";
-        let panes = tabList.filter((pane:any) => pane.key === "0");
-        panes= panes.map((item:any)=>({...item,IsNewOpen:false} ) );
-        setTabList(panes)
-        setActiveKey(activeKey)
+    // const add = () => {
+    //     const activeKey:string= "0";
+    //     let panes = tabList.filter((pane:any) => pane.key === "0");
+    //     panes= panes.map((item:any)=>({...item,IsNewOpen:false} ) );
+    //     setTabList(panes)
+    //     setActiveKey(activeKey)
 
-      }
+    //   }
     
-    const remove = (targetKey:any) => {
-        // tslint:disable-next-line:radix
-        let activeKey:any = ActiveKey;
-        let lastIndex:any;
-        tabList.forEach((pane:any, i:any) => {
-          if (pane.key === targetKey) {
-            lastIndex = i - 1;
-          }
-        });
-        let panes = tabList.filter((pane:any) => pane.key !== targetKey);
-        panes= panes.map((item:any)=>({...item,IsNewOpen:false} ) );
-        if (lastIndex >= 0 && activeKey === targetKey) {
-        activeKey = panes[lastIndex].key;
-        }
-        setTabList(panes)
-        setActiveKey(activeKey)
-    }
+    // const remove = (targetKey:any) => {
+    //     // tslint:disable-next-line:radix
+    //     let activeKey:any = ActiveKey;
+    //     let lastIndex:any;
+    //     tabList.forEach((pane:any, i:any) => {
+    //       if (pane.key === targetKey) {
+    //         lastIndex = i - 1;
+    //       }
+    //     });
+    //     let panes = tabList.filter((pane:any) => pane.key !== targetKey);
+    //     panes= panes.map((item:any)=>({...item,IsNewOpen:false} ) );
+    //     if (lastIndex >= 0 && activeKey === targetKey) {
+    //     activeKey = panes[lastIndex].key;
+    //     }
+    //     setTabList(panes)
+    //     setActiveKey(activeKey)
+    // }
     const MenuCallback=(Id:string )=>
     {
       
@@ -208,7 +208,7 @@ function Home (props: any) {
              </Layout>
             
          </Layout>
-         <HomeDrawer/>
+         {/* <HomeDrawer/> */}
          {/* <HomeNoticeDrawer/> */}
      </div>)
 }

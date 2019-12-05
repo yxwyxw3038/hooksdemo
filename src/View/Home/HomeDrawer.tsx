@@ -1,31 +1,33 @@
 import {Col, Drawer, List, Radio, Steps}from 'antd';
-import  * as PubSub from 'pubsub-js';  
-import React, { useState, useContext, useEffect } from "react";
+import   PubSub from 'pubsub-js';  
+import React, { useState, useEffect } from "react";
 import '../../App.css';
 import '../../Css/Home.css';
+import { BaseStore } from '../../Store/BaseStore';
 function HomeDrawer (props: any) {
     const [visible,setVisible]=useState(false)
     const [AllValues,setAllValues]=useState({ type: 'none'})
+    const [beginCount]=useState(0)
     const [data]=useState([
         '一',
         '二',
         '三',
         '四'
        ])
-    const [changeId,setChangeId]=useState()
+    const [pubSubInfo]=useState(new BaseStore({}))
     useEffect(() => {
         const changeIdtemp = PubSub.subscribe('HomeNoticeBadgeCount',(name:any, allValues:any)=>
         {
             setVisible(true)
-            setAllValues({...AllValues, ...allValues})
+            setAllValues(n=>( {...n, ...allValues}))
            
            
         } );  
-        setChangeId(changeIdtemp);
+        pubSubInfo.Update({id:changeIdtemp})
         return ()=> {  
-            PubSub.unsubscribe(changeId); 
+            PubSub.unsubscribe(pubSubInfo.GetInfo.id);
         }
-        });
+        },[beginCount,pubSubInfo]);
     const renderStart=() => {
         return (
             <Drawer

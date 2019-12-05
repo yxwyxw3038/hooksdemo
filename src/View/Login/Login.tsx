@@ -9,28 +9,23 @@ import api from '../../Api/myaxios';
 import LoginFrom from "./LoginFrom";
 import '../../App.css';
 import '../../Css/Login.css';
-import { BaseStore } from "../../Store/BaseStore";
 function Login(props: any) {
     const [loading,setLoading] = useState(false);
     const {user_info} = useContext(MyContext);
     const [beginCount]=useState(0)
-    const [pubSubnfo]=useState(new BaseStore({}))
-    // const [storeInfo] = useState(user_info.Data.GetInfo);
-    // useEffect(() => {
-    //     SetLocalStorageUserInfo(storeInfo)
-    //     return ()=> {  
-    //         SetLocalStorageUserInfo(storeInfo)
-    //     }
-    //     },[storeInfo]);
+    useEffect(() => {
+    const aa:string="测试!"
+    return () =>{
+        console.log(aa)
+    }},[])
     useEffect(() => {
             document.title= initDemoName+"登录页";
             user_info.Data.Clear()
-            ClearLocalStorageUserInfo()
-            pubSubnfo.Update({id:"11111"})
+            ClearLocalStorageUserInfo()        
         return () =>{
          console.log("HI！")
         }
-        },[beginCount, user_info.Data,pubSubnfo]);
+        },[beginCount, user_info.Data]);
 
     const  handleSubmit = (values: any): void => {
         login(values.username,values.password);
@@ -70,7 +65,7 @@ function Login(props: any) {
                                     user_info.Data.Update(info)
                                     // setStoreInfo(info)
                                     SetLocalStorageUserInfo(info)
-                                    myhistory.push('Test');
+                                    myhistory.push('Home');
                                     
                                 } else {
                                         setLoading(false);
