@@ -14,12 +14,13 @@ function Login(props: any) {
     const {user_info} = useContext(MyContext);
     const [beginCount]=useState(0)
     useEffect(() => {
+    document.title= initDemoName+"登录页";
     const aa:string="测试!"
     return () =>{
         console.log(aa)
     }},[])
     useEffect(() => {
-            document.title= initDemoName+"登录页";
+          
             user_info.Data.Clear()
             ClearLocalStorageUserInfo()        
         return () =>{

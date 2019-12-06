@@ -1,1 +1,16 @@
 export const USER_INFO = 'user_info';
+export const STORE_ROUTER = 'router';
+export const TEXT_INFO = 'text_info';
+export const MENU_BILL_INFO = 'menu_bill_info';
+export const USER_BILL_INFO = 'user_bill_info';
+export const ROLE_BILL_INFO = 'role_bill_info';
+export const DEPT_BILL_INFO = 'dept_bill_info';
+export const BUTTON_BILL_INFO = 'button_bill_info';
+export const PARAMETER_BILL_INFO = 'parameter_bill_info';
+export const BILL_NO_BILL_INFO = 'bill_no_bill_info';
+export const NOTICE_BILL_INFO = 'notice_bill_info';
+export const LOGIN_BILL_INFO = 'login_bill_info';
+export const LOG_BILL_INFO = 'log_bill_info';
+export const BLACK_LIST_BILL_INFO = 'black_list_bill_info';
+export const USER_INFO_BILL_INFO = 'user_info_bill_info';
+export const FLOW_BILL_INFO = 'flow_bill_info';
