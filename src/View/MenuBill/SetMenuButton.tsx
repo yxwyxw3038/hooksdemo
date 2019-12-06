@@ -148,7 +148,7 @@ function SetMenuButton (props: any) {
         });
     }
     if(beginCount===0) {
-        if( menuId==="-1")
+        if( menuId!=="-1")
         {
             GetAllButtonForTransfer()
         }
