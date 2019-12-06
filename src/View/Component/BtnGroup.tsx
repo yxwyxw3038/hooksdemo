@@ -1,5 +1,5 @@
 import { Button, message}from 'antd';
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState } from "react";
 import api from '../../Api/myaxios';
 import { IBtnProps } from '../../Type/Interface/InterfaceProps';
 import { initBtnList } from '../../Type/Init/Init';
@@ -12,12 +12,13 @@ function BtnGroup (props: any) {
     const [Token]=useState(props.token)
     const [UserId]=useState(props.userId)
     const [MenuId]=useState(props.menuId)
-    const [eventListCallback]=useState(props.eventListCallback)
+    // const [eventListCallback]=useState(props.eventListCallback)
+    const [beginCount,setBeginCount]=useState(0)
     const isComp=BtnList.length>1?true:BtnList[0].key==="0000"?false:true;
-    useCallback(()=>{
-        console.log("eventListCallback")
-       if (isComp){  eventListCallback(BtnList)}
-    },[BtnList,eventListCallback,isComp])
+    // useCallback(()=>{
+    //     console.log("eventListCallback")
+    //    if (isComp){  eventListCallback(BtnList)}
+    // },[BtnList,eventListCallback,isComp])
     const onClick= (e :any) => {
         const btnKey= e.target.getAttribute("data-key")
         props.eventCallback(btnKey);
@@ -47,13 +48,13 @@ function BtnGroup (props: any) {
                           }
                         btnList.push(item);
                         setBtnList([...btnList])
-                        // props.eventListCallback(btnList);
+                        props.eventListCallback(btnList);
                         // eventListCallback([...btnList])
                        }
                     }
                     else{
                         setBtnList([...initBtnList])
-                        // props.eventListCallback([...initBtnList]);
+                        props.eventListCallback([...initBtnList]);
                         // eventListCallback([...initBtnList])
                     }
                  
@@ -76,9 +77,10 @@ function BtnGroup (props: any) {
 
      });
     }
-    useEffect(() => {
+    if(beginCount===0){
         GetData(Token,UserId,MenuId)
-    },[Token,UserId,MenuId])
+    }
+    setBeginCount(n=>n+1)
     // const isComp=BtnList.length>1?true:BtnList[0].key==="0000"?false:true;
     return (   isComp?  <ButtonGroup>
         {

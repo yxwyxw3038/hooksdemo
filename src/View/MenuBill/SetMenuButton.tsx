@@ -1,5 +1,5 @@
 import {Button,message,Modal, Transfer}from 'antd';
-import React, { useState, useContext, useCallback } from "react";
+import React, { useState, useContext } from "react";
 import api from '../../Api/myaxios';
 import '../../App.css';
 import { MyContext } from '../../Store/HookStore';
@@ -11,7 +11,7 @@ function SetMenuButton (props: any) {
     const [dataSource,setDataSource]=useState([])
     const [targetKeys,setTargetKeys]=useState([])
     const [loading,setLoading]=useState(false)
-    // const [eventListCallback]=useState(props.eventListCallback)
+    const [beginCount,setBeginCount]=useState(0)
     const handleChange = (nextTargetKeys:any, direction:any, moveKeys:any) => {
         setTargetKeys( nextTargetKeys );
     
@@ -147,12 +147,13 @@ function SetMenuButton (props: any) {
         
         });
     }
-    useCallback(()=>{
-        if(menuId!=="-1") {
-             GetAllButtonForTransfer();
+    if(beginCount===0) {
+        if( menuId==="-1")
+        {
+            GetAllButtonForTransfer()
         }
-        
-    },[menuId,user_info.Data])
+    }
+    setBeginCount( n=> n+1)
     return ( <Modal
         title={dialogEditTitle}
         visible={dialogEditVisible}
