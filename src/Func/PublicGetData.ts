@@ -39,6 +39,6 @@ export function GetParameter(token:string, code:string,callback:SelectCallback) 
 }
 export function TimeoutPromise(ms:number) {
     return new Promise((resolve, reject) => {
-      setTimeout(resolve, ms, 'done');
+      setTimeout(resolve, ms);
     });
   }
