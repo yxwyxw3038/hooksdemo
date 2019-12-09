@@ -14,6 +14,7 @@ import BtnGroup from "../Component/BtnGroup";
 import MenuBillEdit from "./MenuBillEdit";
 import SetMenuButton from "./SetMenuButton";
 function MenuBill (props: any) {
+    console.log(props)
     const {user_info,menu_bill_info} = useContext(MyContext);
     const [beginCount]=useState(0)
     const [menuId]=useState(props.menuId)

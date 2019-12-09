@@ -98,6 +98,7 @@ function Home (props: any) {
         }
     }
     const MyComp=(compName:string ,compId:string,isNewOpen:boolean):any =>{
+      //  compName="Test"
        const TheMyComp=asyncComponent(() => import('../../View/'+compName+'/'+compName));
        return <TheMyComp menuId={compId} isNewOpen={isNewOpen}/>
      }
