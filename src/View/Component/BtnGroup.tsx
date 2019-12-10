@@ -13,7 +13,7 @@ function BtnGroup (props: any) {
     const [UserId]=useState(props.userId)
     const [MenuId]=useState(props.menuId)
     // const [eventListCallback]=useState(props.eventListCallback)
-    const [beginCount,setBeginCount]=useState(0)
+    const [begin,setBegin]=useState(true)
     const isComp=BtnList.length>1?true:BtnList[0].key==="0000"?false:true;
     // useCallback(()=>{
     //     console.log("eventListCallback")
@@ -77,10 +77,12 @@ function BtnGroup (props: any) {
 
      });
     }
-    if(beginCount===0){
+    if(begin){
         GetData(Token,UserId,MenuId)
+        setBegin(false)
     }
-    setBeginCount(n=>n+1)
+
+  
     // const isComp=BtnList.length>1?true:BtnList[0].key==="0000"?false:true;
     return (   isComp?  <ButtonGroup>
         {

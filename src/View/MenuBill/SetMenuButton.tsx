@@ -11,7 +11,7 @@ function SetMenuButton (props: any) {
     const [dataSource,setDataSource]=useState([])
     const [targetKeys,setTargetKeys]=useState([])
     const [loading,setLoading]=useState(false)
-    const [beginCount,setBeginCount]=useState(0)
+    const [begin,setBegin]=useState(true)
     const handleChange = (nextTargetKeys:any, direction:any, moveKeys:any) => {
         setTargetKeys( nextTargetKeys );
     
@@ -147,13 +147,15 @@ function SetMenuButton (props: any) {
         
         });
     }
-    if(beginCount===0) {
+    if(begin) {
         if( menuId!=="-1")
         {
+            setBegin(false)
             GetAllButtonForTransfer()
         }
+      
     }
-    setBeginCount( n=> n+1)
+  
     return ( <Modal
         title={dialogEditTitle}
         visible={dialogEditVisible}

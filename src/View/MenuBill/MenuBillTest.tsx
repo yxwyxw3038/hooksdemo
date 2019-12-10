@@ -13,12 +13,12 @@ import moment from "moment";
 import BtnGroup from "../Component/BtnGroup";
 import MenuBillEdit from "./MenuBillEdit";
 import SetMenuButton from "./SetMenuButton";
-function MenuBill (props: any) {
+function MenuBillTest (props: any) {
     console.log(props)
     const {user_info,menu_bill_info} = useContext(MyContext);
     const [beginCount]=useState(0)
     const [menuId]=useState(props.menuId)
-    const [info,setInfo]= useState(menu_bill_info.Data.GetInfo)
+    const [info,setInfo]=  menu_bill_info.Data.GetInfo
     const onLookClick=(Id:any)=>
     {
      const myinfo={...info}; 
@@ -677,4 +677,4 @@ function MenuBill (props: any) {
         <SetMenuButton menuId={info.menuButtonId}  dialogEditTitle={info.menuButtonTitle}  dialogEditVisible={info.menuButtonVisible} eventCallback={menuButtonCallback}/>
         </div>)
 }
-export default React.memo(MenuBill);
+export default React.memo(MenuBillTest);

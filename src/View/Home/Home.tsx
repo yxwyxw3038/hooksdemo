@@ -16,7 +16,7 @@ const TabPane = Tabs.TabPane;
 function Home (props: any) {
     const {user_info} = useContext(MyContext);
     const [ActiveKey,setActiveKey]=useState("0")
-    const [beginCount]=useState(0)
+    const [begin]=useState(true)
     // const [myWs]=useState({Data:new ws().NewWs()})
     const [tabList,setTabList]=useState([...initTabs])
     const myhistory=props.history;
@@ -73,7 +73,7 @@ function Home (props: any) {
          
      return () =>{ }
 
-    },[beginCount,myhistory,user_info])
+    },[begin,myhistory,user_info])
     const UserInfoCallback=():any =>{
         let tabListTemp= [...tabList];
         tabListTemp= tabListTemp.map((item:any)=>({...item,IsNew:false} ) );
@@ -110,7 +110,14 @@ function Home (props: any) {
         setActiveKey(activeKey)
       }
     const onEdit = (targetKey :any, action:any) => {
-        tabList[action](targetKey);
+        // tabList[action](targetKey);
+         switch(action) {
+           case "remove":
+              remove(targetKey)
+              break
+            default:
+              break
+         }
       }
     // const add = () => {
     //     const activeKey:string= "0";
@@ -121,23 +128,23 @@ function Home (props: any) {
 
     //   }
     
-    // const remove = (targetKey:any) => {
-    //     // tslint:disable-next-line:radix
-    //     let activeKey:any = ActiveKey;
-    //     let lastIndex:any;
-    //     tabList.forEach((pane:any, i:any) => {
-    //       if (pane.key === targetKey) {
-    //         lastIndex = i - 1;
-    //       }
-    //     });
-    //     let panes = tabList.filter((pane:any) => pane.key !== targetKey);
-    //     panes= panes.map((item:any)=>({...item,IsNewOpen:false} ) );
-    //     if (lastIndex >= 0 && activeKey === targetKey) {
-    //     activeKey = panes[lastIndex].key;
-    //     }
-    //     setTabList(panes)
-    //     setActiveKey(activeKey)
-    // }
+    const remove = (targetKey:any) => {
+        // tslint:disable-next-line:radix
+        let activeKey:any = ActiveKey;
+        let lastIndex:any;
+        tabList.forEach((pane:any, i:any) => {
+          if (pane.key === targetKey) {
+            lastIndex = i - 1;
+          }
+        });
+        let panes = tabList.filter((pane:any) => pane.key !== targetKey);
+        panes= panes.map((item:any)=>({...item,IsNewOpen:false} ) );
+        if (lastIndex >= 0 && activeKey === targetKey) {
+        activeKey = panes[lastIndex].key;
+        }
+        setTabList(panes)
+        setActiveKey(activeKey)
+    }
     const MenuCallback=(Id:string )=>
     {
       
