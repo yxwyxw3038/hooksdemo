@@ -50,47 +50,84 @@ function Login(props: any) {
             setLoading(true)
             const password1 = CryptoJS.enc.Utf8.parse(password);
             const passwords = CryptoJS.enc.Base64.stringify(password1);
-   
-            const myapi =  new api();
-            myapi.post('Login', {
-                accountName: username,
-                passWord: passwords,
-              }, (response: any ) => {
-                  if (response.status >= 200 && response.status < 300) {
-                       if (response.data) {
-                            const jsonData: any = response.data;
-                            if (jsonData.Code === '1') {
-                                if (jsonData.Data) {
-                                const info: IUserInfo =JSON.parse(jsonData.Data)
-                                if (info) {
-                                    user_info.Data.Update(info)
-                                    // setStoreInfo(info)
-                                    SetLocalStorageUserInfo(info)
-                                    myhistory.push('Home');
-                                    
-                                } else {
+            new api().post0('Login' ,{
+                    accountName: username,
+                    passWord: passwords,
+                  }).then((jsonData:any)=>{
+                         
+                                    if (jsonData.Code === '1') {
+                                        if (jsonData.Data) {
+                                        const info: IUserInfo =JSON.parse(jsonData.Data)
+                                        if (info) {
+                                            user_info.Data.Update(info)
+                                            SetLocalStorageUserInfo(info)
+                                            myhistory.push('Home');
+                                            
+                                        } else {
+                                                setLoading(false);
+                                                message.error('验证异常!');
+                                        }
+                                        } else {
+                                        
+                                            setLoading(false);
+                                            message.error(jsonData.Message);
+                
+                                        }
+                
+                                    } else {
+                                        user_info.Data.Clear()
+                                        // setStoreInfo({})
                                         setLoading(false);
-                                        message.error('验证异常!');
-                                }
-                                } else {
-                                
-                                    setLoading(false);
                                         message.error(jsonData.Message);
+                                    }
+                                
+
+                        
+                    }
+                   ).catch((err:any)=>{
+                       setLoading(false);
+                       message.error(err.message);
+                  })
+            // const myapi =  new api();
+            // myapi.post('Login', {
+            //     accountName: username,
+            //     passWord: passwords,
+            //   }, (response: any ) => {
+            //       if (response.status >= 200 && response.status < 300) {
+            //            if (response.data) {
+            //                 const jsonData: any = response.data;
+            //                 if (jsonData.Code === '1') {
+            //                     if (jsonData.Data) {
+            //                     const info: IUserInfo =JSON.parse(jsonData.Data)
+            //                     if (info) {
+            //                         user_info.Data.Update(info)
+            //                         // setStoreInfo(info)
+            //                         SetLocalStorageUserInfo(info)
+            //                         myhistory.push('Home');
+                                    
+            //                     } else {
+            //                             setLoading(false);
+            //                             message.error('验证异常!');
+            //                     }
+            //                     } else {
+                                
+            //                         setLoading(false);
+            //                             message.error(jsonData.Message);
         
-                                }
+            //                     }
         
-                            } else {
-                                user_info.Data.Clear()
-                                // setStoreInfo({})
-                                setLoading(false);
-                                message.error(jsonData.Message);
-                            }
-                        }
-                  } else {
-                    setLoading(false);
-                        message.error(response.message);
-                  }
-              });
+            //                 } else {
+            //                     user_info.Data.Clear()
+            //                     // setStoreInfo({})
+            //                     setLoading(false);
+            //                     message.error(jsonData.Message);
+            //                 }
+            //             }
+            //       } else {
+            //         setLoading(false);
+            //             message.error(response.message);
+            //       }
+            //   });
      
        }
     return ( <div className="login-wrap"><LoginFrom loading={loading} onHandleSubmit={handleSubmit} /> </div> 
