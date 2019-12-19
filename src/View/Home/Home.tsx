@@ -150,54 +150,96 @@ function Home (props: any) {
       
         let tabListTemp= tabList;
         tabListTemp= tabListTemp.map((item:any)=>({...item,IsNewOpen:false} ) );
-        const myapi =  new api();
-        myapi.post('Menu/GetMenuByID?Token='+user_info.Data.GetInfo.Token, {
-            ID:Id}, (response: any) => {
-         if (response.status >= 200 && response.status < 300) {
-         if (response.data) {
-            const jsonData: any = response.data;
-             if (jsonData.Code === '1') {
-                if (jsonData.Data) {
-                    const info=JSON.parse(jsonData.Data);
-                    
-                    let findbj=-1;
-                    // tslint:disable-next-line:no-var-keyword
-                    for (var i = 0; i < tabListTemp.length; i++) {
-                    if(tabListTemp[i].key===info.ID.toString())
-                    {
-                      findbj=i;
-                      break;
-                    }
+        new api().post0('Menu/GetMenuByID?Token='+user_info.Data.GetInfo.Token, {
+                  ID:Id}).then((jsonData:any)=>{
+            if (jsonData.Code === '1') {
+              if (jsonData.Data) {
+                                        const info=JSON.parse(jsonData.Data);
+                                        
+                                        let findbj=-1;
+                                        // tslint:disable-next-line:no-var-keyword
+                                        for (var i = 0; i < tabListTemp.length; i++) {
+                                        if(tabListTemp[i].key===info.ID.toString())
+                                        {
+                                          findbj=i;
+                                          break;
+                                        }
 
-                  }
-                  if(findbj===-1)
-                  {
-                      const addtab={title: info.Name, content: info.LinkAddress, key: info.ID.toString(), closable: true,icon:info.Icon,IsNewOpen:true}
-                      tabListTemp.push(addtab);
-                      setTabList(tabListTemp)
-                      setActiveKey(info.ID.toString())
-                  }
-                  else{
-                      setActiveKey(info.ID.toString())
-                  }
+                                      }
+                                      if(findbj===-1)
+                                      {
+                                          const addtab={title: info.Name, content: info.LinkAddress, key: info.ID.toString(), closable: true,icon:info.Icon,IsNewOpen:true}
+                                          tabListTemp.push(addtab);
+                                          setTabList(tabListTemp)
+                                          setActiveKey(info.ID.toString())
+                                      }
+                                      else{
+                                          setActiveKey(info.ID.toString())
+                                      }
 
-                }
-                else
-                {
-                    message.error("打开菜单异常！");
-                    return;
-                }
+                                    }
+                                    else
+                                    {
+                                        message.error("打开菜单异常！");
+                                        return;
+                                    }
              } else {
-             message.error(jsonData.Message);
-             return;
+                message.error(jsonData.Message);
+                return;
              }
-         }
-         } else {
-             message.error(response.message);
-             return;
-         }
+         
+            }).catch((err:any)=>{
+              message.error(err.message);
+              return;
+         })
+    //     const myapi =  new api();
+    //     myapi.post('Menu/GetMenuByID?Token='+user_info.Data.GetInfo.Token, {
+    //         ID:Id}, (response: any) => {
+    //      if (response.status >= 200 && response.status < 300) {
+    //      if (response.data) {
+    //         const jsonData: any = response.data;
+    //          if (jsonData.Code === '1') {
+    //             if (jsonData.Data) {
+    //                 const info=JSON.parse(jsonData.Data);
+                    
+    //                 let findbj=-1;
+    //                 // tslint:disable-next-line:no-var-keyword
+    //                 for (var i = 0; i < tabListTemp.length; i++) {
+    //                 if(tabListTemp[i].key===info.ID.toString())
+    //                 {
+    //                   findbj=i;
+    //                   break;
+    //                 }
 
-     });
+    //               }
+    //               if(findbj===-1)
+    //               {
+    //                   const addtab={title: info.Name, content: info.LinkAddress, key: info.ID.toString(), closable: true,icon:info.Icon,IsNewOpen:true}
+    //                   tabListTemp.push(addtab);
+    //                   setTabList(tabListTemp)
+    //                   setActiveKey(info.ID.toString())
+    //               }
+    //               else{
+    //                   setActiveKey(info.ID.toString())
+    //               }
+
+    //             }
+    //             else
+    //             {
+    //                 message.error("打开菜单异常！");
+    //                 return;
+    //             }
+    //          } else {
+    //          message.error(jsonData.Message);
+    //          return;
+    //          }
+    //      }
+    //      } else {
+    //          message.error(response.message);
+    //          return;
+    //      }
+
+    //  });
     }
     return (<div>
         <Layout>

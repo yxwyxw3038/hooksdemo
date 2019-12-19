@@ -22,15 +22,9 @@ function MenuBill (props: any) {
     const onLookClick=(Id:any)=>
     {
      const myinfo={...info}; 
-    
-     const myapi =  new api();
-     myapi.post("Menu/GetMenuByID?Token="+user_info.Data.GetInfo.Token,{
-         ID:Id
-       }, (response: any) => {
-            if (response.status >= 200 && response.status < 300) {
-            if (response.data) {       
-            
-                const jsonData =  response.data ;
+     new api().post0("Menu/GetMenuByID?Token="+user_info.Data.GetInfo.Token,{
+             ID:Id
+           }).then((jsonData:any)=>{
                 if (jsonData.Code === '1') {
                     if (jsonData.Data) {
                         const tempdata=JSON.parse(jsonData.Data);
@@ -50,13 +44,44 @@ function MenuBill (props: any) {
                 message.error(jsonData.Message);
                 return;
                 }
-            }
-            } else {
-                message.error(response.message);
-                return;
-            }
+           }).catch((err:any)=>{
+            message.error(err.message);
+            return;
+       })
+    //  const myapi =  new api();
+    //  myapi.post("Menu/GetMenuByID?Token="+user_info.Data.GetInfo.Token,{
+    //      ID:Id
+    //    }, (response: any) => {
+    //         if (response.status >= 200 && response.status < 300) {
+    //         if (response.data) {       
+            
+    //             const jsonData =  response.data ;
+    //             if (jsonData.Code === '1') {
+    //                 if (jsonData.Data) {
+    //                     const tempdata=JSON.parse(jsonData.Data);
+    //                     myinfo.loading=true
+    //                     myinfo.form={...tempdata}
+    //                     myinfo.dialogEditOrNew=3
+    //                     myinfo.dialogEditTitle="查看菜单"
+    //                     myinfo.dialogEditVisible=true
+    //                     setInfo({...info,...myinfo})
+    //                 }
+    //                 else
+    //                 {   
+    //                     message.error("加载异常！");
+    //                     return;
+    //                 }
+    //             } else {
+    //             message.error(jsonData.Message);
+    //             return;
+    //             }
+    //         }
+    //         } else {
+    //             message.error(response.message);
+    //             return;
+    //         }
         
-        });
+    //     });
     }
     const menuButtonCallback=()=>
     {
@@ -154,7 +179,7 @@ function MenuBill (props: any) {
    const deleteNext=()=>
    {
      const myinfo={...info} 
-     const myapi =  new api();
+    //  const myapi =  new api();
      let str='';
      const maxid=myinfo.selectedRowKeys.length-1;
       for(let i=0;i< myinfo.selectedRowKeys.length;i++)
@@ -171,34 +196,55 @@ function MenuBill (props: any) {
       }
      myinfo.loading=true;
      setInfo({...myinfo});
-     myapi.post("Menu/DeleteMenu?Token="+user_info.Data.GetInfo.Token,{
+     new api().post0("Menu/DeleteMenu?Token="+user_info.Data.GetInfo.Token,{
+             str
+           }).then((jsonData:any)=>{
+                myinfo.loading=false;
+                setInfo({...myinfo});
+                if (jsonData.Code === '1') {
+                message.info("删除成功！");
+                myinfo.selectedRowKeys=[];
+                setInfo({...myinfo});
+                search();
+                GetMenu();
+                } else {
+                message.error(jsonData.Message);
+                return;
+                }
+           }).catch((err:any)=>{
+            myinfo.loading=false;
+            setInfo({...myinfo});
+            message.error(err.message);
+            return;
+       })
+    //  myapi.post("Menu/DeleteMenu?Token="+user_info.Data.GetInfo.Token,{
        
-         // tslint:disable-next-line:object-literal-sort-keys
-         str
-       }, (response: any) => {
-         myinfo.loading=false;
-         setInfo({...myinfo});
-     if (response.status >= 200 && response.status < 300) {
-     if (response.data) {       
-         // tslint:disable-next-line:no-eval
-         const jsonData = response.data ;
-         if (jsonData.Code === '1') {
-             message.info("删除成功！");
-             myinfo.selectedRowKeys=[];
-             setInfo({...myinfo});
-             search();
-             GetMenu();
-         } else {
-         message.error(jsonData.Message);
-         return;
-         }
-     }
-     } else {
-         message.error(response.message);
-         return;
-     }
+    //      // tslint:disable-next-line:object-literal-sort-keys
+    //      str
+    //    }, (response: any) => {
+    //      myinfo.loading=false;
+    //      setInfo({...myinfo});
+    //  if (response.status >= 200 && response.status < 300) {
+    //  if (response.data) {       
+    //      // tslint:disable-next-line:no-eval
+    //      const jsonData = response.data ;
+    //      if (jsonData.Code === '1') {
+    //          message.info("删除成功！");
+    //          myinfo.selectedRowKeys=[];
+    //          setInfo({...myinfo});
+    //          search();
+    //          GetMenu();
+    //      } else {
+    //      message.error(jsonData.Message);
+    //      return;
+    //      }
+    //  }
+    //  } else {
+    //      message.error(response.message);
+    //      return;
+    //  }
  
- });
+//  });
  
  }
    
@@ -216,14 +262,10 @@ function MenuBill (props: any) {
          message.error("请只选择一条要修改的数据！");
          return;
      }
-     const myapi =  new api();
-     myapi.post("Menu/GetMenuByID?Token="+user_info.Data.GetInfo.Token,{
-         ID: myinfo.selectedRowKeys[0]
-       }, (response: any) => {
-     if (response.status >= 200 && response.status < 300) {
-     if (response.data) {       
-         const jsonData =  response.data ;
-         if (jsonData.Code === '1') {
+     new api().post0("Menu/GetMenuByID?Token="+user_info.Data.GetInfo.Token,{
+                 ID: myinfo.selectedRowKeys[0]
+     }).then((jsonData:any)=>{
+        if (jsonData.Code === '1') {
              if (jsonData.Data) {
                  const tempdata=JSON.parse(jsonData.Data);
                  myinfo.loading=true
@@ -243,24 +285,52 @@ function MenuBill (props: any) {
          message.error(jsonData.Message);
          return;
          }
-     }
-     } else {
-         message.error(response.message);
-         return;
-     }
+     }).catch((err:any)=>{
+        message.error(err.message);
+        return;
+   })
+//      const myapi =  new api();
+//      myapi.post("Menu/GetMenuByID?Token="+user_info.Data.GetInfo.Token,{
+//          ID: myinfo.selectedRowKeys[0]
+//        }, (response: any) => {
+//      if (response.status >= 200 && response.status < 300) {
+//      if (response.data) {       
+//          const jsonData =  response.data ;
+//          if (jsonData.Code === '1') {
+//              if (jsonData.Data) {
+//                  const tempdata=JSON.parse(jsonData.Data);
+//                  myinfo.loading=true
+               
+//                  myinfo.form={...tempdata}
+//                  myinfo.dialogEditOrNew=2
+//                  myinfo.dialogEditTitle="修改菜单"
+//                  myinfo.dialogEditVisible=true
+//                  setInfo({...myinfo})
+//              }
+//              else
+//              {   
+//                  message.error("加载异常！");
+//                  return;
+//              }
+//          } else {
+//          message.error(jsonData.Message);
+//          return;
+//          }
+//      }
+//      } else {
+//          message.error(response.message);
+//          return;
+//      }
  
- });
+//  });
      
    }
    const add=()=>
    {
      const myinfo={...info}
-     const myapi =  new api();
-     myapi.post("Menu/GetMenuAllCount?Token="+user_info.Data.GetInfo.Token,{
-       }, (response: any) => {
-     if (response.status >= 200 && response.status < 300) {
-     if (response.data) {       
-         const jsonData =  response.data;
+     new api().post0("Menu/GetMenuAllCount?Token="+user_info.Data.GetInfo.Token,{}).then(
+        (jsonData:any)=>{
+    
          if (jsonData.Code === '1') {
              if (jsonData.Data) {
                  myinfo.form={
@@ -288,13 +358,51 @@ function MenuBill (props: any) {
        
          return;
          }
-     }
-     } else {
-         message.error(response.message);
-         return;
-     }
+     
+    }).catch((err:any)=>{
+        message.error(err.message);
+        return;
+   })
+//      const myapi =  new api();
+//      myapi.post("Menu/GetMenuAllCount?Token="+user_info.Data.GetInfo.Token,{
+//        }, (response: any) => {
+//      if (response.status >= 200 && response.status < 300) {
+//      if (response.data) {       
+//          const jsonData =  response.data;
+//          if (jsonData.Code === '1') {
+//              if (jsonData.Data) {
+//                  myinfo.form={
+                   
+//                      ...initMenuBillForm,
+//                      Sort:   Number(jsonData.Data)+1
  
- });
+//                  }
+//                  myinfo.loading=true
+//                  myinfo.dialogEditOrNew=1
+//                  myinfo.dialogEditTitle="新增菜单"
+//                  myinfo.dialogEditVisible=true
+//                  setInfo({...myinfo})
+//              }
+//              else
+//              {
+                
+//                  message.error("加载异常！")
+            
+//                  return;
+//              }
+//          } else {
+       
+//          message.error(jsonData.Message);
+       
+//          return;
+//          }
+//      }
+//      } else {
+//          message.error(response.message);
+//          return;
+//      }
+ 
+//  });
  
  
  
@@ -378,69 +486,115 @@ function MenuBill (props: any) {
    } 
    const Init=()=>
    {
-         const myapi =  new api();
+        //  const myapi =  new api();
          const myinfo={...info}
          myinfo.loading=true;
          setInfo({...myinfo});
-         myapi.post("Menu/GetAllMenuViewInfo?Token="+user_info.Data.GetInfo.Token,{
+         new api().post0("Menu/GetAllMenuViewInfo?Token="+user_info.Data.GetInfo.Token,{
+                     CurrentPage: myinfo.paginationInfo.currentPage,
+                     PageSize: myinfo.paginationInfo.currentpagesize,
+                     ParameterStr: myinfo.parameterStr
+                   }).then((jsonData:any)=>{
+                if (jsonData.Code === '1') {
+                        if(jsonData.DataCount)
+                        {
+                            myinfo.paginationInfo.totalCount= parseInt(jsonData.DataCount);
+                        }
+                        if (jsonData.Data) {
+                            
+                            const info=JSON.parse(jsonData.Data);
+                            if(info&&info.length>0)
+                            {
+                                myinfo.data=info;
+                            }
+                            else{
+                                myinfo.data=[];
+                            
+                            }
+        
+                            setInfo({...myinfo})
+        
+                        }
+                        else
+                        {
+                            
+                            message.error("加载异常！");
+                            myinfo.data=[];
+                            setInfo({...myinfo})
+                            return;
+                        }
+                    } else {
+                
+                    message.error(jsonData.Message);
+                    myinfo.data=[];
+                    setInfo({...myinfo})
+                    return;
+                    }
+                    }).catch((err:any)=>{
+                        myinfo.data=[];
+                        setInfo({...myinfo})
+                        message.error(err.message);
+                        return;
+                   })
+    //      myapi.post("Menu/GetAllMenuViewInfo?Token="+user_info.Data.GetInfo.Token,{
             
-             CurrentPage: myinfo.paginationInfo.currentPage,
-             PageSize: myinfo.paginationInfo.currentpagesize,
-             ParameterStr: myinfo.parameterStr,
+    //          CurrentPage: myinfo.paginationInfo.currentPage,
+    //          PageSize: myinfo.paginationInfo.currentpagesize,
+    //          ParameterStr: myinfo.parameterStr,
    
-           }, (response: any) => {
-             myinfo.paginationInfo.totalCount=0;
-             myinfo.loading=false;
-         if (response.status >= 200 && response.status < 300) {
-         if (response.data) {
+    //        }, (response: any) => {
+    //          myinfo.paginationInfo.totalCount=0;
+    //          myinfo.loading=false;
+    //      if (response.status >= 200 && response.status < 300) {
+    //      if (response.data) {
             
-             const jsonData: any = response.data;
-             if (jsonData.Code === '1') {
-                 if(jsonData.DataCount)
-                 {
-                     // tslint:disable-next-line:radix
-                     myinfo.paginationInfo.totalCount= parseInt(jsonData.DataCount);
-                 }
+    //          const jsonData: any = response.data;
+    //          if (jsonData.Code === '1') {
+    //              if(jsonData.DataCount)
+    //              {
+    //                  // tslint:disable-next-line:radix
+    //                  myinfo.paginationInfo.totalCount= parseInt(jsonData.DataCount);
+    //              }
                
-                 if (jsonData.Data) {
+    //              if (jsonData.Data) {
                     
-                     const info=JSON.parse(jsonData.Data);
-                     if(info&&info.length>0)
-                     {
-                         myinfo.data=info;
-                     }
-                     else{
-                         myinfo.data=[];
+    //                  const info=JSON.parse(jsonData.Data);
+    //                  if(info&&info.length>0)
+    //                  {
+    //                      myinfo.data=info;
+    //                  }
+    //                  else{
+    //                      myinfo.data=[];
                       
-                     }
+    //                  }
  
-                     setInfo({...myinfo})
+    //                  setInfo({...myinfo})
  
-                 }
-                 else
-                 {
+    //              }
+    //              else
+    //              {
                     
-                     message.error("加载异常！");
-                     myinfo.data=[];
-                     setInfo({...myinfo})
-                     return;
-                 }
-             } else {
+    //                  message.error("加载异常！");
+    //                  myinfo.data=[];
+    //                  setInfo({...myinfo})
+    //                  return;
+    //              }
+    //          } else {
            
-             message.error(jsonData.Message);
-             myinfo.data=[];
-             setInfo({...myinfo})
-             return;
-             }
-         }
-         } else {
-             message.error(response.message);
-             myinfo.data=[];
-             setInfo({...myinfo})
-             return;
-         }
+    //          message.error(jsonData.Message);
+    //          myinfo.data=[];
+    //          setInfo({...myinfo})
+    //          return;
+    //          }
+    //      }
+    //      } else {
+    //          message.error(response.message);
+    //          myinfo.data=[];
+    //          setInfo({...myinfo})
+    //          return;
+    //      }
  
-     });
+    //  });
    }
     const onChange= (e :any) => {
       const itemName= e.target.getAttribute("data-item-name")

@@ -26,56 +26,99 @@ function BtnGroup (props: any) {
       }
       const GetData= (token:string, userId:string,menuId:string) => {
         setLoading(true)
-        const myapi =  new api();
-        myapi.post('Button/GetButtonByMenuIdAndUserId?Token='+token, {
-            menuId,
-            userId
-        }, (response: any) => {
-        setLoading(false)
-         if (response.status >= 200 && response.status < 300) {
-         if (response.data) {
-            const jsonData: any = response.data;
-            if (jsonData.Code === '1') {
-                if (jsonData.Data) {
-                    const info=JSON.parse(jsonData.Data);
-                    if(info&&info.length>0)
-                    {
-                       const btnList:IBtn[]=[];
-                       for(let i=0;i<info.length;i++)
-                       {
-                        const item:IBtn={
-                            title: info[i].Name, key: info[i].Code,icon:info[i].Icon
-                          }
-                        btnList.push(item);
-                        setBtnList([...btnList])
-                        props.eventListCallback(btnList);
-                        // eventListCallback([...btnList])
-                       }
+        new api().post0('Button/GetButtonByMenuIdAndUserId?Token='+token,{
+                    menuId,
+                    userId
+            }).then((jsonData:any)=>{
+                    if (jsonData.Code === '1') {
+                            if (jsonData.Data) {
+                                const info=JSON.parse(jsonData.Data);
+                                if(info&&info.length>0)
+                                {
+                                const btnList:IBtn[]=[];
+                                for(let i=0;i<info.length;i++)
+                                {
+                                    const item:IBtn={
+                                        title: info[i].Name, key: info[i].Code,icon:info[i].Icon
+                                    }
+                                    btnList.push(item);
+                                    setBtnList([...btnList])
+                                    props.eventListCallback(btnList);
+                                    // eventListCallback([...btnList])
+                                }
+                                }
+                                else{
+                                    setBtnList([...initBtnList])
+                                    props.eventListCallback([...initBtnList]);
+                                    // eventListCallback([...initBtnList])
+                                }
+                            
+
+                            }
+                            else
+                            {
+                                message.error("加载按钮权限异常！");
+                                return;
+                            }
+                    } else {
+                    message.error(jsonData.Message);
+                    return;
                     }
-                    else{
-                        setBtnList([...initBtnList])
-                        props.eventListCallback([...initBtnList]);
-                        // eventListCallback([...initBtnList])
-                    }
+         
+            }).catch((err:any)=>{
+                message.error(err.message);
+                return;
+           })
+    //     const myapi =  new api();
+    //     myapi.post('Button/GetButtonByMenuIdAndUserId?Token='+token, {
+    //         menuId,
+    //         userId
+    //     }, (response: any) => {
+    //     setLoading(false)
+    //      if (response.status >= 200 && response.status < 300) {
+    //      if (response.data) {
+    //         const jsonData: any = response.data;
+    //         if (jsonData.Code === '1') {
+    //             if (jsonData.Data) {
+    //                 const info=JSON.parse(jsonData.Data);
+    //                 if(info&&info.length>0)
+    //                 {
+    //                    const btnList:IBtn[]=[];
+    //                    for(let i=0;i<info.length;i++)
+    //                    {
+    //                     const item:IBtn={
+    //                         title: info[i].Name, key: info[i].Code,icon:info[i].Icon
+    //                       }
+    //                     btnList.push(item);
+    //                     setBtnList([...btnList])
+    //                     props.eventListCallback(btnList);
+    //                     // eventListCallback([...btnList])
+    //                    }
+    //                 }
+    //                 else{
+    //                     setBtnList([...initBtnList])
+    //                     props.eventListCallback([...initBtnList]);
+    //                     // eventListCallback([...initBtnList])
+    //                 }
                  
 
-                }
-                else
-                {
-                    message.error("加载按钮权限异常！");
-                    return;
-                }
-             } else {
-             message.error(jsonData.Message);
-             return;
-             }
-         }
-         } else {
-             message.error(response.message);
-             return;
-         }
+    //             }
+    //             else
+    //             {
+    //                 message.error("加载按钮权限异常！");
+    //                 return;
+    //             }
+    //          } else {
+    //          message.error(jsonData.Message);
+    //          return;
+    //          }
+    //      }
+    //      } else {
+    //          message.error(response.message);
+    //          return;
+    //      }
 
-     });
+    //  });
     }
     if(begin){
         GetData(Token,UserId,MenuId)

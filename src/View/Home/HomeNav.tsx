@@ -10,15 +10,10 @@ function HomeNav (props: any) {
     const[menu,setMenu]= useState(initMenu)
     const [beginCount]=useState(0)
     const GetMenu=(tempToken:string ,tempuserID:string)=>{
-
-        const myapi =  new api();
-        myapi.post('User/GetUserMenu?Token='+tempToken, {
-            userID:tempuserID,
-          }, (response: any ) => {
-              if (response.status >= 200 && response.status < 300) {
-                   if (response.data) {
-                    const jsonData: any = response.data;
-                    if (jsonData.Code === '1') {
+        new api().post0('User/GetUserMenu?Token='+tempToken, {
+                userID:tempuserID,
+        }).then((jsonData:any)=>{
+              if (jsonData.Code === '1') {
 
                         if (jsonData.Data) {
                             const info: any = JSON.parse(jsonData.Data)
@@ -38,12 +33,45 @@ function HomeNav (props: any) {
 
                     }
                       
-                  }
-              } else {
-                    setMenu({...initMenu})
-                    message.error(response.message);
-              }
-          });
+                  
+        }).catch((err:any)=>{
+            setMenu({...initMenu})
+            message.error(err.message)
+            return;
+       })
+        // const myapi =  new api();
+        // myapi.post('User/GetUserMenu?Token='+tempToken, {
+        //     userID:tempuserID,
+        //   }, (response: any ) => {
+        //       if (response.status >= 200 && response.status < 300) {
+        //            if (response.data) {
+        //             const jsonData: any = response.data;
+        //             if (jsonData.Code === '1') {
+
+        //                 if (jsonData.Data) {
+        //                     const info: any = JSON.parse(jsonData.Data)
+        //                     if(info){
+                        
+        //                         setMenu(info);
+        //                     }
+        //                     else{
+                              
+        //                         setMenu({...initMenu})
+        //                     }
+        //                 }
+        //             }
+        //             else{
+        //                 setMenu({...initMenu})
+        //                 message.error(jsonData.Message);
+
+        //             }
+                      
+        //           }
+        //       } else {
+        //             setMenu({...initMenu})
+        //             message.error(response.message);
+        //       }
+        //   });
     }
     const handleClick= (e:any):void => {
        props.menuCallback(e.key);
