@@ -30,6 +30,7 @@ function BtnGroup (props: any) {
                     menuId,
                     userId
             }).then((jsonData:any)=>{
+                setLoading(false)
                     if (jsonData.Code === '1') {
                             if (jsonData.Data) {
                                 const info=JSON.parse(jsonData.Data);
@@ -66,6 +67,7 @@ function BtnGroup (props: any) {
                     }
          
             }).catch((err:any)=>{
+                setLoading(false)
                 message.error(err.message);
                 return;
            })

@@ -16,16 +16,17 @@ import SetMenuButton from "./SetMenuButton";
 function MenuBill (props: any) {
     console.log(props)
     const {user_info,menu_bill_info} = useContext(MyContext);
-    const [beginCount]=useState(0)
+    const [begin,setBegin]=useState(true)
     const [menuId]=useState(props.menuId)
     const [info,setInfo]= useState(menu_bill_info.Data.GetInfo)
     const onLookClick=(Id:any)=>
     {
-     const myinfo={...info}; 
+
      new api().post0("Menu/GetMenuByID?Token="+user_info.Data.GetInfo.Token,{
              ID:Id
            }).then((jsonData:any)=>{
                 if (jsonData.Code === '1') {
+                    const myinfo={...info}
                     if (jsonData.Data) {
                         const tempdata=JSON.parse(jsonData.Data);
                         myinfo.loading=true
@@ -48,40 +49,6 @@ function MenuBill (props: any) {
             message.error(err.message);
             return;
        })
-    //  const myapi =  new api();
-    //  myapi.post("Menu/GetMenuByID?Token="+user_info.Data.GetInfo.Token,{
-    //      ID:Id
-    //    }, (response: any) => {
-    //         if (response.status >= 200 && response.status < 300) {
-    //         if (response.data) {       
-            
-    //             const jsonData =  response.data ;
-    //             if (jsonData.Code === '1') {
-    //                 if (jsonData.Data) {
-    //                     const tempdata=JSON.parse(jsonData.Data);
-    //                     myinfo.loading=true
-    //                     myinfo.form={...tempdata}
-    //                     myinfo.dialogEditOrNew=3
-    //                     myinfo.dialogEditTitle="查看菜单"
-    //                     myinfo.dialogEditVisible=true
-    //                     setInfo({...info,...myinfo})
-    //                 }
-    //                 else
-    //                 {   
-    //                     message.error("加载异常！");
-    //                     return;
-    //                 }
-    //             } else {
-    //             message.error(jsonData.Message);
-    //             return;
-    //             }
-    //         }
-    //         } else {
-    //             message.error(response.message);
-    //             return;
-    //         }
-        
-    //     });
     }
     const menuButtonCallback=()=>
     {
@@ -106,9 +73,9 @@ function MenuBill (props: any) {
      }
     }
     const btnGroupListCallback= (btnList :IBtn[]) => {
-     const myinfo={...info}
-     myinfo.btnList=btnList;
-     setInfo({...myinfo});
+    //  const myinfo={...info}
+    //  myinfo.btnList=btnList;
+     setInfo({...info,btnList:[...btnList]});
     }
     const btnGroupCallback= (key :string) => {
      switch(key)
@@ -178,27 +145,27 @@ function MenuBill (props: any) {
    }
    const deleteNext=()=>
    {
-     const myinfo={...info} 
+   
     //  const myapi =  new api();
      let str='';
-     const maxid=myinfo.selectedRowKeys.length-1;
-      for(let i=0;i< myinfo.selectedRowKeys.length;i++)
+     const maxid=info.selectedRowKeys.length-1;
+      for(let i=0;i< info.selectedRowKeys.length;i++)
       {
        
         if(i===maxid)
         {
-        str=str+myinfo.selectedRowKeys[i].toString();
+        str=str+info.selectedRowKeys[i].toString();
         }
         else{
-              str=str+myinfo.selectedRowKeys[i].toString()+',';
+              str=str+info.selectedRowKeys[i].toString()+',';
         }
        
       }
-     myinfo.loading=true;
-     setInfo({...myinfo});
+     setInfo({...info,loading:true});
      new api().post0("Menu/DeleteMenu?Token="+user_info.Data.GetInfo.Token,{
              str
            }).then((jsonData:any)=>{
+                const myinfo={...info} 
                 myinfo.loading=false;
                 setInfo({...myinfo});
                 if (jsonData.Code === '1') {
@@ -212,62 +179,35 @@ function MenuBill (props: any) {
                 return;
                 }
            }).catch((err:any)=>{
-            myinfo.loading=false;
-            setInfo({...myinfo});
+            setInfo({...info,loading:false});
             message.error(err.message);
             return;
        })
-    //  myapi.post("Menu/DeleteMenu?Token="+user_info.Data.GetInfo.Token,{
-       
-    //      // tslint:disable-next-line:object-literal-sort-keys
-    //      str
-    //    }, (response: any) => {
-    //      myinfo.loading=false;
-    //      setInfo({...myinfo});
-    //  if (response.status >= 200 && response.status < 300) {
-    //  if (response.data) {       
-    //      // tslint:disable-next-line:no-eval
-    //      const jsonData = response.data ;
-    //      if (jsonData.Code === '1') {
-    //          message.info("删除成功！");
-    //          myinfo.selectedRowKeys=[];
-    //          setInfo({...myinfo});
-    //          search();
-    //          GetMenu();
-    //      } else {
-    //      message.error(jsonData.Message);
-    //      return;
-    //      }
-    //  }
-    //  } else {
-    //      message.error(response.message);
-    //      return;
-    //  }
- 
-//  });
  
  }
    
  const edit=()=>
    {
  
-    const myinfo={...info}
-     if(myinfo.selectedRowKeys.length<=0)
+   
+     if(info.selectedRowKeys.length<=0)
      {
          message.error("请选择要修改的数据！");
          return;
      }
-     if(myinfo.selectedRowKeys.length>1)
+     if(info.selectedRowKeys.length>1)
      {
          message.error("请只选择一条要修改的数据！");
          return;
      }
+     setInfo({...info,loading:true});
      new api().post0("Menu/GetMenuByID?Token="+user_info.Data.GetInfo.Token,{
-                 ID: myinfo.selectedRowKeys[0]
+                 ID: info.selectedRowKeys[0]
      }).then((jsonData:any)=>{
         if (jsonData.Code === '1') {
              if (jsonData.Data) {
                  const tempdata=JSON.parse(jsonData.Data);
+                 const myinfo={...info}
                  myinfo.loading=true
                
                  myinfo.form={...tempdata}
@@ -277,62 +217,31 @@ function MenuBill (props: any) {
                  setInfo({...myinfo})
              }
              else
-             {   
+             {   setInfo({...info,loading:false});
                  message.error("加载异常！");
                  return;
              }
          } else {
-         message.error(jsonData.Message);
-         return;
+            setInfo({...info,loading:false});
+            message.error(jsonData.Message);
+            return;
          }
      }).catch((err:any)=>{
+        setInfo({...info,loading:false});
         message.error(err.message);
         return;
    })
-//      const myapi =  new api();
-//      myapi.post("Menu/GetMenuByID?Token="+user_info.Data.GetInfo.Token,{
-//          ID: myinfo.selectedRowKeys[0]
-//        }, (response: any) => {
-//      if (response.status >= 200 && response.status < 300) {
-//      if (response.data) {       
-//          const jsonData =  response.data ;
-//          if (jsonData.Code === '1') {
-//              if (jsonData.Data) {
-//                  const tempdata=JSON.parse(jsonData.Data);
-//                  myinfo.loading=true
-               
-//                  myinfo.form={...tempdata}
-//                  myinfo.dialogEditOrNew=2
-//                  myinfo.dialogEditTitle="修改菜单"
-//                  myinfo.dialogEditVisible=true
-//                  setInfo({...myinfo})
-//              }
-//              else
-//              {   
-//                  message.error("加载异常！");
-//                  return;
-//              }
-//          } else {
-//          message.error(jsonData.Message);
-//          return;
-//          }
-//      }
-//      } else {
-//          message.error(response.message);
-//          return;
-//      }
- 
-//  });
      
    }
    const add=()=>
    {
-     const myinfo={...info}
+    setInfo({...info,loading:true});
      new api().post0("Menu/GetMenuAllCount?Token="+user_info.Data.GetInfo.Token,{}).then(
         (jsonData:any)=>{
     
          if (jsonData.Code === '1') {
              if (jsonData.Data) {
+                const myinfo={...info}
                  myinfo.form={
                    
                      ...initMenuBillForm,
@@ -347,13 +256,13 @@ function MenuBill (props: any) {
              }
              else
              {
-                
+                setInfo({...info,loading:false});
                  message.error("加载异常！")
             
                  return;
              }
          } else {
-       
+         setInfo({...info,loading:false});
          message.error(jsonData.Message);
        
          return;
@@ -363,49 +272,6 @@ function MenuBill (props: any) {
         message.error(err.message);
         return;
    })
-//      const myapi =  new api();
-//      myapi.post("Menu/GetMenuAllCount?Token="+user_info.Data.GetInfo.Token,{
-//        }, (response: any) => {
-//      if (response.status >= 200 && response.status < 300) {
-//      if (response.data) {       
-//          const jsonData =  response.data;
-//          if (jsonData.Code === '1') {
-//              if (jsonData.Data) {
-//                  myinfo.form={
-                   
-//                      ...initMenuBillForm,
-//                      Sort:   Number(jsonData.Data)+1
- 
-//                  }
-//                  myinfo.loading=true
-//                  myinfo.dialogEditOrNew=1
-//                  myinfo.dialogEditTitle="新增菜单"
-//                  myinfo.dialogEditVisible=true
-//                  setInfo({...myinfo})
-//              }
-//              else
-//              {
-                
-//                  message.error("加载异常！")
-            
-//                  return;
-//              }
-//          } else {
-       
-//          message.error(jsonData.Message);
-       
-//          return;
-//          }
-//      }
-//      } else {
-//          message.error(response.message);
-//          return;
-//      }
- 
-//  });
- 
- 
- 
     
    }
    const search=()=>
@@ -482,20 +348,20 @@ function MenuBill (props: any) {
    }
    const asyncInit= async () =>{
 
-        TimeoutPromise(500).then(()=>{ Init() })
+        TimeoutPromise(100).then(()=>{ Init() })
    } 
    const Init=()=>
    {
         //  const myapi =  new api();
-         const myinfo={...info}
-         myinfo.loading=true;
-         setInfo({...myinfo});
+        
+         setInfo({...info,loading:true});
          new api().post0("Menu/GetAllMenuViewInfo?Token="+user_info.Data.GetInfo.Token,{
-                     CurrentPage: myinfo.paginationInfo.currentPage,
-                     PageSize: myinfo.paginationInfo.currentpagesize,
-                     ParameterStr: myinfo.parameterStr
+                     CurrentPage: info.paginationInfo.currentPage,
+                     PageSize: info.paginationInfo.currentpagesize,
+                     ParameterStr: info.parameterStr
                    }).then((jsonData:any)=>{
                 if (jsonData.Code === '1') {
+                        const myinfo={...info}
                         if(jsonData.DataCount)
                         {
                             myinfo.paginationInfo.totalCount= parseInt(jsonData.DataCount);
@@ -526,75 +392,15 @@ function MenuBill (props: any) {
                     } else {
                 
                     message.error(jsonData.Message);
-                    myinfo.data=[];
-                    setInfo({...myinfo})
+                    setInfo({...info,data:[],loading:false})
                     return;
                     }
                     }).catch((err:any)=>{
-                        myinfo.data=[];
-                        setInfo({...myinfo})
+                  
+                        setInfo({...info,data:[],loading:false})
                         message.error(err.message);
                         return;
                    })
-    //      myapi.post("Menu/GetAllMenuViewInfo?Token="+user_info.Data.GetInfo.Token,{
-            
-    //          CurrentPage: myinfo.paginationInfo.currentPage,
-    //          PageSize: myinfo.paginationInfo.currentpagesize,
-    //          ParameterStr: myinfo.parameterStr,
-   
-    //        }, (response: any) => {
-    //          myinfo.paginationInfo.totalCount=0;
-    //          myinfo.loading=false;
-    //      if (response.status >= 200 && response.status < 300) {
-    //      if (response.data) {
-            
-    //          const jsonData: any = response.data;
-    //          if (jsonData.Code === '1') {
-    //              if(jsonData.DataCount)
-    //              {
-    //                  // tslint:disable-next-line:radix
-    //                  myinfo.paginationInfo.totalCount= parseInt(jsonData.DataCount);
-    //              }
-               
-    //              if (jsonData.Data) {
-                    
-    //                  const info=JSON.parse(jsonData.Data);
-    //                  if(info&&info.length>0)
-    //                  {
-    //                      myinfo.data=info;
-    //                  }
-    //                  else{
-    //                      myinfo.data=[];
-                      
-    //                  }
- 
-    //                  setInfo({...myinfo})
- 
-    //              }
-    //              else
-    //              {
-                    
-    //                  message.error("加载异常！");
-    //                  myinfo.data=[];
-    //                  setInfo({...myinfo})
-    //                  return;
-    //              }
-    //          } else {
-           
-    //          message.error(jsonData.Message);
-    //          myinfo.data=[];
-    //          setInfo({...myinfo})
-    //          return;
-    //          }
-    //      }
-    //      } else {
-    //          message.error(response.message);
-    //          myinfo.data=[];
-    //          setInfo({...myinfo})
-    //          return;
-    //      }
- 
-    //  });
    }
     const onChange= (e :any) => {
       const itemName= e.target.getAttribute("data-item-name")
@@ -622,8 +428,6 @@ function MenuBill (props: any) {
        
        if (response.status >= 200 && response.status < 300) {
        if (response.data) {       
-           // tslint:disable-next-line:no-eval
-         //   const jsonData = eval('(' + response.data + ')');
              const jsonData: any = response.data;
            if (jsonData.Code === '1') {
                if (jsonData.Data) {
@@ -717,13 +521,7 @@ function MenuBill (props: any) {
     }
         const initColumnList=
         [
-            //   {
-            //       title: '菜单ID',
-            //       // tslint:disable-next-line:object-literal-sort-keys
-            //       dataIndex: 'ID',
-            //       key: 'ID',
-            //       width: 200,
-            //     },
+          
                 {
                 title: '菜单名称',
                 // tslint:disable-next-line:object-literal-sort-keys
@@ -786,8 +584,9 @@ function MenuBill (props: any) {
         menu_bill_info.Data.Update(info)
     }},[info,menu_bill_info.Data]
     )
-    if(beginCount===0) {
+    if(begin) {
         GetMenu();
+        setBegin(false)
     }
     return (     <div>
         <Collapse accordion={true} activeKey={info.collapseActiveKey} onChange={onCollapseChange}>
